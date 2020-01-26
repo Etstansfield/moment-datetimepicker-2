@@ -1,0 +1,19 @@
+start: {{startDateTime.format()}} <br/>
+curr month: {{currentMonth}} <br/>
+last day of curr month: {{lastDayOfMonth}} <br/>
+picked datetime: {{pickedDateTime.format()}} <br/>
+picked date: {{pickedDateTime.date()}} <br/>
+
+<div class="datepicker-container">
+
+    <div 
+        class="datepicker-container datepicker-container--date"
+        [ngClass]="{'datepicker-container--date--chosen': isCurrentDate(day)}"
+        *ngFor="let day of monthArray"
+        (click)="pickDate(day)"
+     >
+        {{day}}
+    </div>
+
+</div>
+

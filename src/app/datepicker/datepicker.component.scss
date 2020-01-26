@@ -1,0 +1,27 @@
+.datepicker-container {
+    max-width: 200px;
+    max-height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+
+    &--date{
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        color: black;
+        padding: 5px;
+        display: flex;
+        justify-content: center;
+
+        &--chosen {
+            background-color: blue;
+            color: white;
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: blue;
+            color: white;
+        }
+    }
+}

@@ -1,12 +1,17 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
+import { TimepickerComponent } from './timepicker/timepicker.component';
+import { FormsModule } from '@angular/forms';
+
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [FormsModule],
       declarations: [
         AppComponent,
-        DatepickerComponent
+        DatepickerComponent,
+        TimepickerComponent
       ],
     }).compileComponents();
   }));

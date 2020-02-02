@@ -1,0 +1,29 @@
+.time-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+// taken from: https://css-tricks.com/snippets/css/turn-off-number-input-spinners/
+// https://www.w3schools.com/howto/howto_css_hide_arrow_number.asp
+.time-input { 
+  -webkit-appearance: none;
+  -moz-appearance:textfield; 
+  margin: 0;
+
+  max-width: 20px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.time-crement {
+    border: none;
+    background: none;
+
+    &:hover {
+        cursor: pointer;
+        color: blue;
+    }
+}

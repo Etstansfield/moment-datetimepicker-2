@@ -1,0 +1,31 @@
+<div class="time-container">
+    <div class="input-container">
+        <button (click)="incrementHour()" class="time-crement" type="button">+</button>
+        <input 
+            class="time-input" 
+            type="number" 
+            name="hourChange"
+            [(ngModel)]="currentHour"
+            (ngModelChange)="changeHour($event)" 
+            step="1" 
+            min="0" 
+            max="23" 
+        >
+        <button (click)="decrementHour()" class="time-crement" type="button">-</button>
+    </div>
+    <span>:</span>
+    <div class="input-container" >
+        <button (click)="incrementMinute()" class="time-crement" type="button" >+</button>
+        <input 
+            class="time-input" 
+            type="number" 
+            name="minChange"
+            [(ngModel)]="currentMin"
+            (ngModelChange)="changeMinute($event)" 
+            step="1" 
+            min="0" 
+            max="59"
+        >
+        <button (click)="decrementMinute()" class="time-crement" type="button">-</button>
+    </div>
+</div>

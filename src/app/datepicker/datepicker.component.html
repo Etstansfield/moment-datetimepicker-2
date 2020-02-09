@@ -1,18 +1,41 @@
+<!-- Debug Information -->
 start: {{startDateTime.format()}} <br/>
 curr month: {{currentMonth}} <br/>
 last day of curr month: {{lastDayOfMonth}} <br/>
 picked datetime: {{pickedDateTime.format()}} <br/>
 picked date: {{pickedDateTime.date()}} <br/>
 
+<!-- The datepicker itself -->
 <div class="datepicker-container">
 
+    <!-- Month and Year Controls -->
+    <div class="year-month-container" >
+
+        <!-- Month -->
+        <div class="year-month-container__row" >
+            <button class="time-crement" (click)="changeMonth(-1)" > < </button>
+            <!--<span> {{pickedDateTime.format('MMMM')}} </span>-->
+            <select [(ngModel)]="currentMonth" (ngModelChange)="setSpecificMonth($event)" >
+                <option *ngFor="let month of months; let i = index" [value]="i" > {{month}} </option>
+            </select>
+            <button class="time-crement" (click)="changeMonth(1)"> > </button>
+        </div>
+        <!-- Year -->
+        <div class="year-month-container__row" >
+            <button class="time-crement" (click)="changeYear(-1)" > < </button>
+            <span> {{pickedDateTime.format('YYYY')}} </span>
+            <button class="time-crement" (click)="changeYear(1)"> > </button>
+        </div>
+    </div>
+
+    <!-- The current Month Display -->
     <div 
         class="datepicker-container datepicker-container--date"
-        [ngClass]="{'datepicker-container--date--chosen': isCurrentDate(day)}"
+        [ngClass]="{'datepicker-container--date--chosen': isCurrentDate(day.date())}"
         *ngFor="let day of monthArray"
-        (click)="pickDate(day)"
+        (click)="pickDate(day.date())"
      >
-        {{day}}
+        {{day.date()}}
     </div>
 
     <!-- Timepicker -->

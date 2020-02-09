@@ -65,4 +65,57 @@ describe('DatepickerComponent', () => {
     expect(pastDateTime.isSame(component.startDateTime)).toBeTruthy();
   });
 
+  it(`+++ Should alter month by specified amount (-1) +++`, () => {
+    const setMonth = 12;
+    component.pickedDateTime = moment().set('month', setMonth);
+    component.changeMonth(-1);
+
+    expect(component.pickedDateTime.month()).toEqual(11);
+  });
+
+  it(`+++ Should alter month by specified amount (+2) - should change year +++`, () => {
+    const setMonth = 12;
+    component.pickedDateTime = moment().set('month', setMonth);
+    component.changeMonth(2);
+
+    expect(component.pickedDateTime.month()).toEqual(2);
+  });
+
+  it(`+++ Should alter year by specified amount (-1) +++`, () => {
+    const setYear = 2020;
+    component.pickedDateTime = moment().set('year', setYear);
+    component.changeYear(-1);
+
+    expect(component.pickedDateTime.year()).toEqual(2019);
+  });
+
+  it(`+++ Should alter year by specified amount (+2) +++`, () => {
+    const setYear = 2020;
+    component.pickedDateTime = moment().set('year', setYear);
+    component.changeYear(2);
+
+    expect(component.pickedDateTime.year()).toEqual(2022);
+  });
+
+  it(`+++ Should set specific month (5) +++`, () => {
+    component.pickedDateTime = moment();
+    component.setSpecificMonth(5);
+
+    expect(component.pickedDateTime.month()).toEqual(5);
+  });
+
+  it(`+++ Should not set specific month (0) +++`, () => {
+    component.pickedDateTime = moment();
+    component.setSpecificMonth(0);
+
+    expect(component.pickedDateTime.month() === 0).toBeFalsy();
+  });
+
+  it(`+++ Should not set specific month (32) +++`, () => {
+    component.pickedDateTime = moment();
+    component.setSpecificMonth(32);
+
+    expect(component.pickedDateTime.month() === 32).toBeFalsy();
+  });
+
 });

@@ -1,27 +1,59 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-timepicker',
   templateUrl: './timepicker.component.html',
   styleUrls: ['./timepicker.component.scss']
 })
-export class TimepickerComponent implements OnInit {
+export class TimepickerComponent implements OnInit, OnDestroy {
 
   // +++ Inputs +++
   @Input() dateTime = moment();
   @Input() hourChangeAmount = 1;
   @Input() minuteChangeAmount = 1;
-
+  minControlSub: Subscription = new Subscription();
+  hourControlSub: Subscription = new Subscription();
+  minChangeControl = new FormControl();
+  hourChangeControl = new FormControl();
 
   // Internal Variables
   private currentHour = 0;
   private currentMin = 0;
 
+
   constructor() { }
 
+  /**
+   * @description - establish the beginning time and start the subscriptions
+   */
   ngOnInit() {
     this.updateDateTime();
+
+    this.minControlSub = this.minChangeControl.valueChanges.pipe(debounceTime(500)).subscribe(
+      (data: number) => {
+        this.currentMin = data;
+        this.changeMinute(data);
+      }
+    );
+
+    this.hourControlSub = this.hourChangeControl.valueChanges.pipe(debounceTime(500)).subscribe(
+      (data: number) => {
+        this.currentHour = data;
+        this.changeHour(data);
+      }
+    );
+  }
+
+  /**
+   * @description - cleanup on destroying the component
+   */
+  ngOnDestroy() {
+    this.minControlSub.unsubscribe();
+    this.hourControlSub.unsubscribe();
   }
 
   /**

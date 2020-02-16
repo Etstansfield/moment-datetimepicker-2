@@ -1,22 +1,29 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-datepicker',
   templateUrl: './datepicker.component.html',
   styleUrls: ['./datepicker.component.scss']
 })
-export class DatepickerComponent implements OnInit {
+export class DatepickerComponent implements OnInit, OnDestroy {
 
   // Inputs
   @Input() startDateTime: moment.Moment;
   @Input() pickedDateTime: moment.Moment;
-  @Input() maxDateTime: moment.Moment;
+  @Input() maxDateTime: moment.Moment = moment().set('year', 2100);
+  @Input() minDateTime: moment.Moment = moment().set('year', 1900);
 
   // private members
   private currentMonth: number;
   private lastDayOfMonth: number; // 29,30,31
   private monthArray: moment.Moment[];
+  private pickedYear: number;
+  private yearChangeSub: Subscription = new Subscription();
+  private yearChangeControl: FormControl = new FormControl();
   private months = [
     'January',
     'February',
@@ -48,8 +55,20 @@ export class DatepickerComponent implements OnInit {
     this.lastDayOfMonth = moment(this.startDateTime).endOf('month').date();
     // this.monthArray = Array(this.lastDayOfMonth).fill(1).map((x, i) => i + 1);
     this.monthArray = this.fillMonthArray(this.currentMonth, this.startDateTime.year());
+    this.pickedYear = this.pickedDateTime.year();
     // console.log('+++ Test Month Array: ', testMonthArray, ' +++');
 
+    this.yearChangeSub = this.yearChangeControl.valueChanges.pipe(debounceTime(500)).subscribe(
+      (data: number) => {
+        this.pickedYear = data;
+        this.setSpecificYear(data);
+      }
+    );
+
+  }
+
+  ngOnDestroy() {
+    this.yearChangeSub.unsubscribe();
   }
 
   /**
@@ -145,6 +164,25 @@ export class DatepickerComponent implements OnInit {
     }
 
     this.pickedDateTime.set('month', month);
+
+    this.lastDayOfMonth = moment(this.pickedDateTime).endOf('month').date();
+    this.monthArray = this.fillMonthArray(this.pickedDateTime.month(), this.pickedDateTime.year());
+  }
+
+  /**
+   * @description - set a specific year
+   * @param year - the year we want to set
+   */
+  setSpecificYear(year: number): void {
+
+    // @Input() maxDateTime: moment.Moment = moment().set('year', 2100);
+    // @Input() minDateTime: moment.Moment = moment().set('year', 1900);
+
+    if (year < this.minDateTime.year() || year > this.maxDateTime.year()) {
+      return;
+    }
+
+    this.pickedDateTime.set('year', year);
 
     this.lastDayOfMonth = moment(this.pickedDateTime).endOf('month').date();
     this.monthArray = this.fillMonthArray(this.pickedDateTime.month(), this.pickedDateTime.year());

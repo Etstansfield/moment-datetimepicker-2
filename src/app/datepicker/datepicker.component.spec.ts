@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DatepickerComponent } from './datepicker.component';
 import * as moment from 'moment';
 import { TimepickerComponent } from '../timepicker/timepicker.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('DatepickerComponent', () => {
   let component: DatepickerComponent;
@@ -11,7 +11,7 @@ describe('DatepickerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule],
+      imports: [FormsModule, ReactiveFormsModule],
       declarations: [ DatepickerComponent, TimepickerComponent ]
     })
     .compileComponents();
@@ -116,6 +116,27 @@ describe('DatepickerComponent', () => {
     component.setSpecificMonth(32);
 
     expect(component.pickedDateTime.month() === 32).toBeFalsy();
+  });
+
+  it(`+++ Should set specific year (2025) +++`, () => {
+    component.pickedDateTime = moment();
+    component.setSpecificYear(2025);
+
+    expect(component.pickedDateTime.year()).toEqual(2025);
+  });
+
+  it(`+++ Should not set specific year (3200) +++`, () => {
+    component.pickedDateTime = moment();
+    component.setSpecificYear(3200);
+
+    expect(component.pickedDateTime.year() === 3200).toBeFalsy();
+  });
+
+  it(`+++ Should not set specific year (1850) +++`, () => {
+    component.pickedDateTime = moment();
+    component.setSpecificYear(1850);
+
+    expect(component.pickedDateTime.year() === 1850).toBeFalsy();
   });
 
 });

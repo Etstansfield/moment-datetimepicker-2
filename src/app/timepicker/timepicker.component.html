@@ -5,8 +5,8 @@
             class="time-input" 
             type="number" 
             name="hourChange"
-            [(ngModel)]="currentHour"
-            (ngModelChange)="changeHour($event)" 
+            [value]="currentHour"
+            [formControl]="hourChangeControl"
             step="1" 
             min="0" 
             max="23" 
@@ -20,12 +20,14 @@
             class="time-input" 
             type="number" 
             name="minChange"
-            [(ngModel)]="currentMin"
-            (ngModelChange)="changeMinute($event)" 
+            id="minInput"
+            [value]="currentMin"
+            [formControl]="minChangeControl"      
             step="1" 
             min="0" 
             max="59"
         >
+        <!--(ngModelChange)="changeMinute($event)" -->
         <button (click)="decrementMinute()" class="time-crement" type="button">-</button>
     </div>
 </div>

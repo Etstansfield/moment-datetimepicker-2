@@ -2,16 +2,17 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TimepickerComponent } from './timepicker.component';
 import * as moment from 'moment';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 describe('TimepickerComponent', () => {
   let component: TimepickerComponent;
   let fixture: ComponentFixture<TimepickerComponent>;
-
+  
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ FormsModule ],
-      declarations: [ TimepickerComponent ]
+      imports: [ FormsModule, ReactiveFormsModule ],
+      declarations: [ TimepickerComponent ],
     })
     .compileComponents();
   }));
@@ -25,6 +26,16 @@ describe('TimepickerComponent', () => {
   it('+++ Should create +++', () => {
     expect(component).toBeTruthy();
   });
+
+  it('+++ Should create hour and minuete subscriptions +++', () => {
+    component.ngOnInit();
+    expect(
+      component.hourControlSub &&
+      component.minControlSub
+    ).toBeDefined();
+  });
+
+
 
   it(`+++ Should have default date/time as today (${moment().date()}/${moment().month() + 1}/${moment().year()}) +++`, () => {
     const curDate = moment();
@@ -147,4 +158,15 @@ describe('TimepickerComponent', () => {
     ).toBeFalsy();
 
   });
+
+  // ! - Unsure how to get this working - online guides not much help
+  /*it(`+++ Should unsubscribe from any subscriptions +++`, () => {
+    fixture.detectChanges();
+    component.ngOnDestroy();
+    expect(
+      component.minControlSub.unsubscribe &&
+      component.hourControlSub.unsubscribe
+    ).toHaveBeenCalled();
+    // expect(paramMapSubscription.unsubscribe).toHaveBeenCalled();
+  });*/
 });

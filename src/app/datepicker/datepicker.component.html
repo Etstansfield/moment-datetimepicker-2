@@ -4,6 +4,7 @@ curr month: {{currentMonth}} <br/>
 last day of curr month: {{lastDayOfMonth}} <br/>
 picked datetime: {{pickedDateTime.format()}} <br/>
 picked date: {{pickedDateTime.date()}} <br/>
+picked year: {{pickedYear}} <br/>
 
 <!-- The datepicker itself -->
 <div class="datepicker-container">
@@ -23,7 +24,15 @@ picked date: {{pickedDateTime.date()}} <br/>
         <!-- Year -->
         <div class="year-month-container__row" >
             <button class="time-crement" (click)="changeYear(-1)" > < </button>
-            <span> {{pickedDateTime.format('YYYY')}} </span>
+            <input 
+                type="number"
+                [value]="pickedYear"
+                name="yearInput"
+                [formControl]="yearChangeControl"
+                [max]="maxDateTime.year()"
+                [min]="minDateTime.year()"
+                step="1"
+            /> 
             <button class="time-crement" (click)="changeYear(1)"> > </button>
         </div>
     </div>

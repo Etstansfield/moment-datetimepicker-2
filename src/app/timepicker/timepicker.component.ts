@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -15,12 +15,16 @@ export class TimepickerComponent implements OnInit, OnDestroy {
   @Input() dateTime = moment();
   @Input() hourChangeAmount = 1;
   @Input() minuteChangeAmount = 1;
+
+  // Outputs
+  @Output() updatedDateTime: EventEmitter<moment.Moment> = new EventEmitter();
+
+  // Internal Variables
   minControlSub: Subscription = new Subscription();
   hourControlSub: Subscription = new Subscription();
   minChangeControl = new FormControl();
   hourChangeControl = new FormControl();
 
-  // Internal Variables
   private currentHour = 0;
   private currentMin = 0;
 
@@ -62,6 +66,7 @@ export class TimepickerComponent implements OnInit, OnDestroy {
   updateDateTime(): void {
     this.currentHour = this.extractHourFromDateTime();
     this.currentMin = this.extractMinFromDateTime();
+    this.updatedDateTime.emit(this.dateTime);
   }
 
   /**

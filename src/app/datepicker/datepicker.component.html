@@ -1,10 +1,12 @@
 <!-- Debug Information -->
-start: {{startDateTime.format()}} <br/>
-curr month: {{currentMonth}} <br/>
-last day of curr month: {{lastDayOfMonth}} <br/>
-picked datetime: {{pickedDateTime.format()}} <br/>
-picked date: {{pickedDateTime.date()}} <br/>
-picked year: {{pickedYear}} <br/>
+<div *ngIf="debugInfo" id="dateTimeDebug">
+    start: {{startDateTime.format()}} <br/>
+    curr month: {{currentMonth}} <br/>
+    last day of curr month: {{lastDayOfMonth}} <br/>
+    picked datetime: {{pickedDateTime.format()}} <br/>
+    picked date: {{pickedDateTime.date()}} <br/>
+    picked year: {{pickedYear}} <br/>
+</div>
 
 <!-- The datepicker itself -->
 <div class="datepicker-container">
@@ -38,18 +40,19 @@ picked year: {{pickedYear}} <br/>
     </div>
 
     <!-- The current Month Display -->
-    <div 
+    <button 
         class="datepicker-container datepicker-container--date"
         [ngClass]="{'datepicker-container--date--chosen': isCurrentDate(day.date())}"
         *ngFor="let day of monthArray"
         (click)="pickDate(day.date())"
+        [disabled]="day.isAfter(maxDateTime) || day.isBefore(minDateTime)"
      >
         {{day.date()}}
-    </div>
+    </button>
 
     <!-- Timepicker -->
     <div class="timepicker-container">
-        <app-timepicker [dateTime]="pickedDateTime" ></app-timepicker>
+        <app-timepicker [dateTime]="pickedDateTime" (updatedDateTime)="updateDateTime($event)"></app-timepicker>
     </div>
 
 </div>

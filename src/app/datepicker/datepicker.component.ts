@@ -14,8 +14,9 @@ export class DatepickerComponent implements OnInit, OnDestroy {
   // Inputs
   @Input() startDateTime: moment.Moment;
   @Input() pickedDateTime: moment.Moment;
-  @Input() maxDateTime: moment.Moment = moment().set('year', 2100);
-  @Input() minDateTime: moment.Moment = moment().set('year', 1900);
+  @Input() maxDateTime: moment.Moment = moment('20991231', 'YYYYMMDD');
+  @Input() minDateTime: moment.Moment = moment('19010102', 'YYYYMMDD');
+  @Input() debugInfo = false;
 
   // private members
   private currentMonth: number;
@@ -60,7 +61,6 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 
     this.yearChangeSub = this.yearChangeControl.valueChanges.pipe(debounceTime(500)).subscribe(
       (data: number) => {
-        this.pickedYear = data;
         this.setSpecificYear(data);
       }
     );
@@ -104,7 +104,7 @@ export class DatepickerComponent implements OnInit, OnDestroy {
     }
 
     this.pickedDateTime.set('date', date);
-
+    this.updateDateTime(this.pickedDateTime);
   }
 
   /**
@@ -123,18 +123,19 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 
   /**
    * @description - change the current picked month by the amount specified
-   * @param month - the month we want to change to - can be minus 
+   * @param month - the month we want to change to - can be minus
    */
   changeMonth(month: number): void {
 
-    // console.log(`+++ Setting month to: ${month} +++`);
+    // ensure we dont go into max/min
+    const pickedAddedMonth = moment(this.pickedDateTime).add(month, 'month');
+    if (pickedAddedMonth.isBefore(this.minDateTime) || pickedAddedMonth.isAfter(this.maxDateTime)) {
+      return;
+    }
 
     // need to redraw the current month
-
-    this.pickedDateTime.add(month, 'month');
-
-    this.lastDayOfMonth = moment(this.pickedDateTime).endOf('month').date();
-    this.monthArray = this.fillMonthArray(this.pickedDateTime.month(), this.pickedDateTime.year());
+    this.pickedDateTime = moment(pickedAddedMonth);
+    this.updateDateTime(this.pickedDateTime);
 
   }
 
@@ -147,9 +148,7 @@ export class DatepickerComponent implements OnInit, OnDestroy {
     // need to redraw the current month
 
     this.pickedDateTime.add(year, 'year');
-
-    this.lastDayOfMonth = moment(this.pickedDateTime).endOf('month').date();
-    this.monthArray = this.fillMonthArray(this.pickedDateTime.month(), this.pickedDateTime.year());
+    this.updateDateTime(this.pickedDateTime);
 
   }
 
@@ -165,8 +164,7 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 
     this.pickedDateTime.set('month', month);
 
-    this.lastDayOfMonth = moment(this.pickedDateTime).endOf('month').date();
-    this.monthArray = this.fillMonthArray(this.pickedDateTime.month(), this.pickedDateTime.year());
+    this.updateDateTime(this.pickedDateTime);
   }
 
   /**
@@ -175,16 +173,53 @@ export class DatepickerComponent implements OnInit, OnDestroy {
    */
   setSpecificYear(year: number): void {
 
-    // @Input() maxDateTime: moment.Moment = moment().set('year', 2100);
-    // @Input() minDateTime: moment.Moment = moment().set('year', 1900);
-
     if (year < this.minDateTime.year() || year > this.maxDateTime.year()) {
       return;
     }
 
+    this.pickedYear = year;
     this.pickedDateTime.set('year', year);
 
-    this.lastDayOfMonth = moment(this.pickedDateTime).endOf('month').date();
-    this.monthArray = this.fillMonthArray(this.pickedDateTime.month(), this.pickedDateTime.year());
+    this.updateDateTime(this.pickedDateTime);
+  }
+
+  /**
+   * @description - update the displays for showing date and time
+   * @param newDateTime - the new date/time moment we want to display
+   */
+  updateDateTime(newDateTime: moment.Moment): void {
+
+    this.currentMonth = newDateTime.month();
+    this.pickedYear = newDateTime.year();
+    this.lastDayOfMonth = moment(newDateTime).endOf('month').date();
+    this.monthArray = this.fillMonthArray(newDateTime.month(), newDateTime.year());
+  }
+
+  /**
+   * @description - return the current month
+   */
+  getCurrentMonth(): number {
+    return this.currentMonth;
+  }
+
+  /**
+   * @description - return the current year
+   */
+  getCurrentYear(): number {
+    return this.pickedYear;
+  }
+
+  /**
+   * @description - return the current last day of the month
+   */
+  getLastDayOfMonth(): number {
+    return this.lastDayOfMonth;
+  }
+
+  /**
+   * @description - return the current month array
+   */
+  getMonthArray(): moment.Moment[] {
+    return this.monthArray;
   }
 }

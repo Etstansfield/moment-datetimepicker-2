@@ -15,6 +15,8 @@ export class TimepickerComponent implements OnInit, OnDestroy {
   @Input() dateTime = moment();
   @Input() hourChangeAmount = 1;
   @Input() minuteChangeAmount = 1;
+  @Input() maxDateTime: moment.Moment;
+  @Input() minDateTime: moment.Moment;
 
   // Outputs
   @Output() updatedDateTime: EventEmitter<moment.Moment> = new EventEmitter();
@@ -89,7 +91,10 @@ export class TimepickerComponent implements OnInit, OnDestroy {
    */
   changeHour(newHour: number): void {
 
-    if (newHour < 0 || newHour > 23) {  // invalid hours
+    const tempDateTime = moment(this.dateTime).set('hour', newHour);
+
+    if (newHour < 0 || newHour > 23 
+      || tempDateTime.isAfter(this.maxDateTime) || tempDateTime.isBefore(this.minDateTime)) {  // invalid hours
       return;
     }
 
@@ -106,11 +111,13 @@ export class TimepickerComponent implements OnInit, OnDestroy {
    */
   changeMinute(newMin: number): void {
 
-    if (newMin < 0 || newMin > 59) {  // invalid mins
+    const tempDateTime = moment(this.dateTime).set('minute', newMin);
+
+    if (newMin < 0 || newMin > 59 || tempDateTime.isAfter(this.maxDateTime) || tempDateTime.isBefore(this.minDateTime)) {  // invalid mins
       return;
     }
 
-    // else change the hour in the datetime
+    // else change the min in the datetime
 
     this.dateTime.set('minute', newMin);
     this.updateDateTime();
@@ -120,6 +127,13 @@ export class TimepickerComponent implements OnInit, OnDestroy {
    * @description - increment hours by the inputted amount, default 1
    */
   incrementHour(): void {
+
+    const tempDateTime = moment(this.dateTime).add(1, 'hour');
+
+    if (tempDateTime.isAfter(this.maxDateTime)) {  // invalid hours
+      return;
+    }
+
     this.dateTime.add(this.hourChangeAmount, 'hour');
     this.updateDateTime();
   }
@@ -128,6 +142,13 @@ export class TimepickerComponent implements OnInit, OnDestroy {
    * @description - decrement hours by the inputted amount, default 1
    */
   decrementHour(): void {
+
+    const tempDateTime = moment(this.dateTime).add(-1, 'hour');
+
+    if (tempDateTime.isBefore(this.minDateTime)) {  // invalid hours
+      return;
+    }
+
     this.dateTime.add(-this.hourChangeAmount, 'hour');
     this.updateDateTime();
   }
@@ -136,6 +157,13 @@ export class TimepickerComponent implements OnInit, OnDestroy {
    * @description - increment mins by the inputted amount, default 1
    */
   incrementMinute(): void {
+
+    const tempDateTime = moment(this.dateTime).add(1, 'minute');
+
+    if (tempDateTime.isAfter(this.maxDateTime)) {  // invalid hours
+      return;
+    }
+
     this.dateTime.add(this.minuteChangeAmount, 'minute');
     this.updateDateTime();
   }
@@ -144,6 +172,13 @@ export class TimepickerComponent implements OnInit, OnDestroy {
    * @description - decrement mins by the inputted amount, default 1
    */
   decrementMinute(): void {
+
+    const tempDateTime = moment(this.dateTime).add(-1, 'minute');
+
+    if (tempDateTime.isBefore(this.minDateTime)) {  // invalid hours
+      return;
+    }
+
     this.dateTime.add(-this.minuteChangeAmount, 'minute');
     this.updateDateTime();
   }

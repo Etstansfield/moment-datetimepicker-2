@@ -20,6 +20,8 @@ describe('TimepickerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TimepickerComponent);
     component = fixture.componentInstance;
+    component.maxDateTime = moment('09/09/2099', 'DD/MM/YYYY');
+    component.minDateTime = moment('09/09/1999', 'DD/MM/YYYY'); // party like it's 1999... again
     fixture.detectChanges();
   });
 
@@ -157,6 +159,68 @@ describe('TimepickerComponent', () => {
       component.getCurrentMin() === 61
     ).toBeFalsy();
 
+  });
+
+  it(`+++ Does not increment hour over max`, () => {
+    component.dateTime = moment('08/09/2099:23:59', 'DD/MM/YYYY:HH:mm');
+
+    component.incrementHour();
+
+    expect(component.dateTime.isAfter(component.maxDateTime)).toBeFalsy();
+  });
+
+  it(`+++ Does not increment min over max`, () => {
+    component.dateTime = moment('08/09/2099:23:59', 'DD/MM/YYYY:HH:mm');
+
+    component.incrementMinute();
+
+    expect(component.dateTime.isAfter(component.maxDateTime)).toBeFalsy();
+  });
+
+  it(`+++ Does not decrement hour under min`, () => {
+    component.dateTime = moment('09/09/1999:00:01', 'DD/MM/YYYY:HH:mm');
+
+    component.decrementHour();
+
+    expect(component.dateTime.isBefore(component.minDateTime)).toBeFalsy();
+  });
+
+  it(`+++ Does not decrement min under min`, () => {
+    component.dateTime = moment('09/09/1999:00:01', 'DD/MM/YYYY:HH:mm');
+
+    component.incrementMinute();
+
+    expect(component.dateTime.isBefore(component.minDateTime)).toBeFalsy();
+  });
+
+  it(`+++ Does not change minute to be over max`, () => {
+
+    component.dateTime = moment('08/09/2099:23:58', 'DD/MM/YYYY:HH:mm');
+    component.maxDateTime = moment('09/09/2099:23:58', 'DD/MM/YYYY:HH:mm');
+
+    component.changeMinute(59);
+    expect(component.dateTime.isAfter(component.maxDateTime)).toBeFalsy();
+  });
+
+  it(`+++ Does not change minute to be under min`, () => {
+
+    component.dateTime = moment('08/09/2099:23:58', 'DD/MM/YYYY:HH:mm');
+    component.minDateTime = moment('09/09/2099:23:58', 'DD/MM/YYYY:HH:mm');
+
+
+
+    component.changeMinute(1);
+
+    expect(component.dateTime.isBefore(component.minDateTime)).toBeFalsy();
+  });
+
+  it('+++ should unsubscribe on destruction +++', () => {
+
+    spyOn(component.minControlSub, 'unsubscribe');
+    spyOn(component.hourControlSub, 'unsubscribe');
+    component.ngOnDestroy();
+    expect(component.minControlSub.unsubscribe).toHaveBeenCalledTimes(1);
+    expect(component.hourControlSub.unsubscribe).toHaveBeenCalledTimes(1);
   });
 
   // ! - Unsure how to get this working - online guides not much help

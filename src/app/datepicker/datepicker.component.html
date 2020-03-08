@@ -1,6 +1,8 @@
 <!-- Debug Information -->
 <div *ngIf="debugInfo" id="dateTimeDebug">
     start: {{startDateTime.format()}} <br/>
+    max: {{maxDateTime.format()}} <br/>
+    min: {{minDateTime.format()}} <br/>
     curr month: {{currentMonth}} <br/>
     last day of curr month: {{lastDayOfMonth}} <br/>
     picked datetime: {{pickedDateTime.format()}} <br/>
@@ -52,7 +54,12 @@
 
     <!-- Timepicker -->
     <div class="timepicker-container">
-        <app-timepicker [dateTime]="pickedDateTime" (updatedDateTime)="updateDateTime($event)"></app-timepicker>
+        <app-timepicker 
+        [dateTime]="pickedDateTime"
+        [maxDateTime]="maxDateTime"
+        [minDateTime]="minDateTime"
+        (updatedDateTime)="updateDateTime($event)"
+        ></app-timepicker>
     </div>
 
 </div>

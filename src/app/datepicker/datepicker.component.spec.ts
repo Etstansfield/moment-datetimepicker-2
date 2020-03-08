@@ -219,4 +219,11 @@ describe('DatepickerComponent', () => {
     ).toBeDefined();
   });
 
+  it('+++ should unsubscribe on destruction +++', () => {
+
+    spyOn(component.yearChangeSub, 'unsubscribe');
+    component.ngOnDestroy();
+    expect(component.yearChangeSub.unsubscribe).toHaveBeenCalledTimes(1);
+  });
+
 });

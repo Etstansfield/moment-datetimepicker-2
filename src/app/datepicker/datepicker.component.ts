@@ -18,12 +18,14 @@ export class DatepickerComponent implements OnInit, OnDestroy {
   @Input() minDateTime: moment.Moment = moment('19010102', 'YYYYMMDD');
   @Input() debugInfo = false;
 
+  // subscription(s)
+  yearChangeSub: Subscription = new Subscription();
+
   // private members
   private currentMonth: number;
   private lastDayOfMonth: number; // 29,30,31
   private monthArray: moment.Moment[];
   private pickedYear: number;
-  private yearChangeSub: Subscription = new Subscription();
   private yearChangeControl: FormControl = new FormControl();
   private months = [
     'January',

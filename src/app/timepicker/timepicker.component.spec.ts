@@ -204,7 +204,7 @@ describe('TimepickerComponent', () => {
 
   it(`+++ Does not change minute to be under min`, () => {
 
-    component.dateTime = moment('08/09/2099:23:58', 'DD/MM/YYYY:HH:mm');
+    component.dateTime = moment('09/09/2099:23:58', 'DD/MM/YYYY:HH:mm');
     component.minDateTime = moment('09/09/2099:23:58', 'DD/MM/YYYY:HH:mm');
 
 

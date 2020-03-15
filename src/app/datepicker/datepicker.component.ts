@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -17,6 +17,9 @@ export class DatepickerComponent implements OnInit, OnDestroy {
   @Input() maxDateTime: moment.Moment = moment('20991231', 'YYYYMMDD');
   @Input() minDateTime: moment.Moment = moment('19010102', 'YYYYMMDD');
   @Input() debugInfo = false;
+
+  // Outputs
+  @Output() newDateTime: EventEmitter<moment.Moment> = new EventEmitter();
 
   // subscription(s)
   yearChangeSub: Subscription = new Subscription();
@@ -195,6 +198,8 @@ export class DatepickerComponent implements OnInit, OnDestroy {
     this.pickedYear = newDateTime.year();
     this.lastDayOfMonth = moment(newDateTime).endOf('month').date();
     this.monthArray = this.fillMonthArray(newDateTime.month(), newDateTime.year());
+    this.newDateTime.emit(newDateTime);
+    // console.log(`+++ Emitting new date time: ${newDateTime} +++`);
   }
 
   /**

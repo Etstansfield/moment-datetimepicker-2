@@ -1,0 +1,9 @@
+
+<div class="container">
+    <input type="text" [(ngModel)]="momentDateTimeModel" /> <button (click)="toggleDatePicker()" ></button>
+    <app-datepicker 
+    *ngIf="datePickerOpen" 
+    [pickedDateTime]="momentDateTimeModel"
+    (newDateTime)="updateDateTime($event)"
+    ></app-datepicker>
+</div>

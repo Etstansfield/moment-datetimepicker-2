@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { TimepickerComponent } from './timepicker/timepicker.component';
+import { MomentDatepickerComponent } from './moment-datepicker/moment-datepicker.component';
 
 
 @NgModule({
@@ -12,6 +13,7 @@ import { TimepickerComponent } from './timepicker/timepicker.component';
     AppComponent,
     DatepickerComponent,
     TimepickerComponent,
+    MomentDatepickerComponent,
   ],
   imports: [
     BrowserModule,

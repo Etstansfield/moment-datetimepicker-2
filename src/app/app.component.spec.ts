@@ -2,6 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { TimepickerComponent } from './timepicker/timepicker.component';
+import { MomentDatepickerComponent } from './moment-datepicker/moment-datepicker.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('AppComponent', () => {
@@ -11,7 +12,8 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         DatepickerComponent,
-        TimepickerComponent
+        TimepickerComponent,
+        MomentDatepickerComponent
       ],
     }).compileComponents();
   }));

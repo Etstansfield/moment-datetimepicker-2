@@ -9,4 +9,5 @@ import * as moment from 'moment';
 export class AppComponent {
   title = 'moment-datepicker';
   maxDateTimeTest = moment('02/04/2020', 'DD/MM/YYYY');
+  currentMoment = moment();
 }
